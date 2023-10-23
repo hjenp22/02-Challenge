@@ -1,18 +1,16 @@
-var generate = document.querySelector("#generate");
+var generateBtn = document.querySelector("#generate");
+var passwordText = document.querySelector("#password");
 
 function writePassword() {
   var password = generatePassword();
-  var passwordText = document.querySelector("#password");
   passwordText.value = password;
 }
 
 function generatePassword() {
   var minLength = parseInt(prompt("Enter the length of the password between 8 and 128 characters"));
-
-  var isValidLength = !isNaN(minLength) && minLength >= 8 && minLength <= 128;
-
-  if (!isValidLength) {
+  if (!isValidLength(minLength)) {
     alert("Please enter a valid password length between 8 and 128 characters");
+    return "";
   }
 
   var includeLowercase = confirm("Include lowercase characters?");
@@ -21,50 +19,37 @@ function generatePassword() {
   var includeSpecial = confirm("Include special characters?");
 
   var allChars = buildCharacterSet(includeLowercase, includeUppercase, includeNumeric, includeSpecial);
-  var isValidChars = allChars !== "";
+  var isValidChars = allChars.length > 0;
 
   if (!isValidChars) {
     alert("Please select at least one character type for the password.");
+    return "";
   }
 
-  if (isValidLength && isValidChars) {
-    return generateRandomPassword(allChars, minLength);
-  }
+  return generateRandomPassword(minLength, allChars);
 }
 
-function buildCharacterSet(includeLowercase, includeUppercase, includeNumeric, includeSpecial) {
-  var lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
-  var uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  var numericChars = "0123456789";
-  var specialChars = "!@#$%^&*_()+-=[]{}|;:,.<>?";
+function isValidLength(length) {
+  return length >= 8 && length <= 128;
+}
 
+function buildCharacterSet(lower, upper, numeric, special) {
   var allChars = "";
-
-  if (includeLowercase) {
-    allChars += lowercaseChars;
-  }
-  if (includeUppercase) {
-    allChars += uppercaseChars;
-  }
-  if (includeNumeric) {
-    allChars += numericChars;
-  }
-  if (includeSpecial) {
-    allChars += specialChars;
-  }
+  if (lower) allChars += "abcdefghijklmnopqrstuvwxyz";
+  if (upper) allChars += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  if (numeric) allChars += "0123456789";
+  if (special) allChars += "!@#$%^&*()_+-=[]{}|;':,.<>?/";
 
   return allChars;
 }
 
-function generateRandomPassword(allChars, minLength) {
+function generateRandomPassword(length, characters) {
   var password = "";
-
-  for (var i = 0; i < minLength; i++) {
-    var randomIndex = Math.floor(Math.random() * allChars.length);
-    password += allChars.charAt(randomIndex);
+  for (var i = 0; i < length; i++) {
+    var randomIndex = Math.floor(Math.random() * characters.length);
+    password += characters.charAt(randomIndex);
   }
-
   return password;
 }
 
-generate.addEventListener("click", writePassword);
+generateBtn.addEventListener("click", writePassword);
