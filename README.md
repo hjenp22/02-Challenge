@@ -20,9 +20,11 @@ Using the skillsets learned over the course of HTML, CSS, and JavaSCript to crea
 - Then the password will either be displayed or an alert will show on the page
 
 ## Generator Screenshot
+![password](image.png)
+Password Generator HTML page
 
 ## Link to Deployed Attributes
-
+ https://hjenp22.github.io/password-generatorHW3/
 ## About the Author
 - Email: hjipark22@gmail.com
 - Github: hjenp22
